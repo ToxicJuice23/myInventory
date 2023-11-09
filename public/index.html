@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            async function main() {
+                let api = await fetch("/api");
+                let rows = await api.json();
+
+                let el = document.getElementById("main");
+                for (let i = 0; i < rows.length; i++) {
+                    let rowElement = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    let td2 = document.createElement("td");
+                    let td3 = document.createElement("td");
+
+                    if (rows[i].quantity < 5 && rows[i].quantity > 0) {
+                        // yellow
+                        td3.id = "low";
+                    } else if (rows[i].quantity >= 5) {
+                        // green
+                        td3.id = "high";
+                    } else {
+                        // red
+                        td3.id = "zero";
+                    }
+                    let tn1 = document.createTextNode(rows[i].name);
+                    let tn2 = document.createTextNode("Row "+new String(rows[i].row||0)+" Shelf "+new String(rows[i].shelf||0));
+                    let tn3 = document.createTextNode(new String(rows[i].quantity));
+                    td1.appendChild(tn1);
+                    td2.appendChild(tn2);
+                    td3.appendChild(tn3);
+                    rowElement.appendChild(td1);
+                    rowElement.appendChild(td2);
+                    rowElement.appendChild(td3);
+                    el.appendChild(rowElement);
+                }
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body onload="main()">
+        <center>
+            <table id="main">
+                <tr>
+                    <th>List Of items</th>
+                    <th>Locations</th>
+                    <th>Quantity</th>
+                </tr>
+            </table>
+        </center>
+    </body>
+</html>
