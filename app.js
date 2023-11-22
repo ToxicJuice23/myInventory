@@ -21,6 +21,26 @@ app.get("/api", async(req, res) => {
     res.json(rows.rows);
 });
 
+app.get("/increment/:itemid", async(req, res) => {
+    let rows = await conn.query("SELECT * FROM inventory WHERE item_id = "+req.params.itemid);
+    rows = rows.rows;
+    if (rows.length == 1) {
+        let qty = rows[0].quantity;
+        conn.query(`UPDATE inventory SET quantity=${qty+1} WHERE item_id = ${req.params.itemid};`);
+    }
+    res.redirect("/");
+});
+
+app.get("/decrement/:itemid", async(req, res) => {
+    let rows = await conn.query("SELECT * FROM inventory WHERE item_id = "+req.params.itemid);
+    rows = rows.rows;
+    if (rows.length == 1) {
+        let qty = rows[0].quantity;
+        conn.query(`UPDATE inventory SET quantity=${qty-1} WHERE item_id = ${req.params.itemid};`);
+    }
+    res.redirect("/");
+});
+
 app.listen(process.env.PORT || 3000, () => {
     console.log("Port: ", process.env.PORT || 3000);
 });
